@@ -1,0 +1,26 @@
+#!/bin/bash
+
+
+echo "starting"
+
+sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y && sudo apt autoclean -y
+#curl LINKTBD
+distro=$(if echo " bullseye focal impish jammy uma una " | grep -q " $(lsb_release -sc) "; then echo $(lsb_release -sc); else echo focal; fi)
+wget -O- https://deb.librewolf.net/keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/librewolf.gpg
+sudo tee /etc/apt/sources.list.d/librewolf.sources << EOF > /dev/null
+Types: deb
+URIs: https://deb.librewolf.net
+Suites: $distro
+Components: main
+Architectures: amd64
+Signed-By: /usr/share/keyrings/librewolf.gpg
+EOF
+sudo apt update
+sudo apt install librewolf -y
+wget https://az764295.vo.msecnd.net/stable/3b889b090b5ad5793f524b5d1d39fda662b96a2a/code_1.69.2-1658162013_amd64.deb
+dpkg -i code_1.69.2-1658162013_amd64.deb
+rm code_1.69.2-1658162013_amd64.deb
+sudo apt install kde-plasma-desktop -y
+mv reactionary /usr/share/plasma/desktoptheme/
+
+reboot
